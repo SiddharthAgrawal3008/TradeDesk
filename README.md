@@ -2,6 +2,9 @@
 
 Built by **Siddharth Agrawal** · Final-year IS @ RVCE · [siddharthagrawal804@gmail.com](mailto:siddharthagrawal804@gmail.com)
 
+### Live Demo: [https://tradedesk-ordz.onrender.com](https://tradedesk-ordz.onrender.com)
+> First load may take ~30 seconds if the server is sleeping (free tier).
+
 A real-time stock broker client dashboard with live price streaming, per-user subscriptions, and persistent accounts.
 
 ---
