@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradeDesk — Sign In</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <a href="index.html" class="auth-logo">
+      <div class="logo-mark">T</div>
+      <span class="brand-name">TradeDesk</span>
+    </a>
+
+    <h1 class="auth-title">Sign in</h1>
+    <p class="auth-sub" id="auth-sub">Access your real-time dashboard.</p>
+
+    <div id="form-error" class="form-error"></div>
+
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+        <div id="email-error" class="field-error"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Your password" autocomplete="current-password" required />
+        <div id="password-error" class="field-error"></div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submit-btn">Sign In</button>
+    </form>
+
+    <p class="auth-link">Don&rsquo;t have an account? <a href="signup.html">Create one</a></p>
+  </div>
+
+  <script>
+    (function () {
+      // Show "account created" hint if redirected from signup
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('registered') === '1') {
+        const sub = document.getElementById('auth-sub');
+        sub.textContent = 'Account created! Sign in to continue.';
+        sub.style.color = 'var(--green)';
+      }
+
+      const form      = document.getElementById('login-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const formErr   = document.getElementById('form-error');
+      const emailEl   = document.getElementById('email');
+      const passEl    = document.getElementById('password');
+      const emailErr  = document.getElementById('email-error');
+      const passErr   = document.getElementById('password-error');
+
+      function clearField(el, errEl) {
+        el.classList.remove('error');
+        errEl.classList.remove('visible');
+      }
+
+      function showFieldError(el, errEl, msg) {
+        el.classList.add('error');
+        errEl.textContent = msg;
+        errEl.classList.add('visible');
+      }
+
+      function clearAll() {
+        clearField(emailEl, emailErr);
+        clearField(passEl, passErr);
+        formErr.textContent = '';
+        formErr.classList.remove('visible');
+      }
+
+      emailEl.addEventListener('input', () => clearField(emailEl, emailErr));
+      passEl.addEventListener('input',  () => clearField(passEl, passErr));
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        clearAll();
+
+        const email    = emailEl.value.trim();
+        const password = passEl.value;
+        let valid = true;
+
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) { showFieldError(emailEl, emailErr, 'Email address is required.'); valid = false; }
+        else if (!emailRe.test(email)) { showFieldError(emailEl, emailErr, 'Please enter a valid email address.'); valid = false; }
+
+        if (!password) { showFieldError(passEl, passErr, 'Password is required.'); valid = false; }
+
+        if (!valid) return;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in…';
+
+        try {
+          const res  = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            sessionStorage.setItem('td_email', data.email || email);
+            sessionStorage.setItem('td_name',  data.name  || email.split('@')[0]);
+            window.location.href = 'dashboard.html';
+          } else {
+            formErr.textContent = data.error || 'Incorrect email or password.';
+            formErr.classList.add('visible');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign In';
+          }
+        } catch {
+          formErr.textContent = 'Network error — please check your connection and try again.';
+          formErr.classList.add('visible');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In';
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradeDesk — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dashboard-page">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="logo-mark">T</div>
+      <span class="brand-name">TradeDesk</span>
+    </div>
+
+    <div class="navbar-right">
+      <div class="connection-status">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-label">Connecting&hellip;</span>
+      </div>
+
+      <div class="user-info">
+        <div class="user-avatar" id="user-avatar">?</div>
+        <div class="user-details">
+          <span class="user-name-display" id="user-name-display">&mdash;</span>
+          <span class="user-email-display" id="user-email-display">&mdash;</span>
+        </div>
+      </div>
+
+      <button class="theme-toggle" id="theme-toggle" title="Toggle light / dark mode">&#9788;</button>
+      <button class="btn-logout" id="btn-logout">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- Market Watch -->
+    <div class="section-header">
+      <h2>Market Watch</h2>
+      <span class="subtitle">Subscribe to a ticker to receive live price updates</span>
+    </div>
+    <div class="stocks-grid" id="stocks-grid"></div>
+
+    <!-- Portfolio -->
+    <div class="portfolio-section">
+      <div class="section-header">
+        <h2>My Portfolio</h2>
+        <span class="subtitle">Live charts &mdash; last 30 price points</span>
+      </div>
+      <div class="portfolio-grid" id="portfolio-grid"></div>
+      <div class="portfolio-empty" id="portfolio-empty">
+        <div class="empty-icon">📈</div>
+        <p>Subscribe to a stock above to see live charts here.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <span>TradeDesk &middot; Made by</span>
+    <span class="footer-name">Siddharth Agrawal</span>
+    <span class="sep">&middot;</span>
+    <a href="mailto:siddharthagrawal804@gmail.com">siddharthagrawal804@gmail.com</a>
+    <span class="sep">&middot;</span>
+    <a href="https://github.com/SiddharthAgrawal3008" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Socket.io client (served by the backend) -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- App logic -->
+  <script src="app.js"></script>
+
+</body>
+</html>
